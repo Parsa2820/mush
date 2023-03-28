@@ -1,0 +1,28 @@
+name: mush
+help: Multi User SSH Helper
+version: 0.1.0
+
+commands:
+  - name: useradd
+    alias: u
+    help: Add a new user
+
+    flags:
+      - long: --username
+        short: -u
+        arg: username
+        help: "Username of the new user (default: random 16 characters)"
+      - long: --password
+        short: -p
+        arg: password
+        help: "Password of the new user (default: random 16 characters)"
+      - long: --expire
+        short: -e
+        arg: expire
+        help: "Expiration date of the new user (default: 1 month later)"
+        default: $(date -d "+1 month" +%Y-%m-%d)
+      - long: --traffic
+        short: -t
+        arg: traffic
+        help: "Traffic limit of the new user"
+        default: 20GB
