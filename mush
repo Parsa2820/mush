@@ -35,6 +35,7 @@ mush_usage() {
   # :command.usage_commands
   printf "%s\n" "Commands:"
   printf "  %s   Add a new user\n" "useradd"
+  printf "  %s   \n" "test   "
   echo
 
   # :command.long_usage
@@ -98,6 +99,35 @@ mush_useradd_usage() {
     printf "    Traffic limit of the new user\n"
     printf "    Default: 20GB\n"
     echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+mush_test_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "mush test\n"
+    echo
+
+  else
+    printf "mush test\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  mush test\n"
+  printf "  mush test --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
 
     # :command.usage_fixed_flags
     printf "  %s\n" "--help, -h"
@@ -176,7 +206,7 @@ mush_useradd_command() {
 
   encrypted=$(openssl passwd -1 $password)
 
-  result=$(useradd -e $expire -M -s /bin/sh -p $encrypted $username)
+  result=$(useradd -e $expire -M -s /bin/true -p $encrypted $username)
   if [[ $result == "useradd: user '$username' already exists" ]]; then
       echo "user already exists"
       exit 1
@@ -185,6 +215,16 @@ mush_useradd_command() {
   echo "User created successfully"
   echo "Username: $username"
   echo "Password: $password"
+}
+
+# :command.function
+mush_test_command() {
+  # src/test_command.sh
+  echo "# this file is located in 'src/test_command.sh'"
+  echo "# code for 'mush test' goes here"
+  echo "# you can edit it freely and regenerate (it will not be overwritten)"
+  inspect_args
+
 }
 
 # :command.parse_requirements
@@ -220,6 +260,13 @@ parse_requirements() {
       action="useradd"
       shift
       mush_useradd_parse_requirements "$@"
+      shift $#
+      ;;
+
+    test)
+      action="test"
+      shift
+      mush_test_parse_requirements "$@"
       shift $#
       ;;
 
@@ -366,6 +413,50 @@ mush_useradd_parse_requirements() {
 
 }
 
+# :command.parse_requirements
+mush_test_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        mush_test_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="test"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
 # :command.initialize
 initialize() {
   version="0.1.0"
@@ -387,6 +478,7 @@ run() {
 
   case "$action" in
     "useradd") mush_useradd_command ;;
+    "test") mush_test_command ;;
   esac
 }
 
