@@ -17,6 +17,9 @@ if [[ $result == "useradd: user '$username' already exists" ]]; then
     exit 1
 fi
 
+# TODO: add iptables chain, send every tcp traffic with user source port to this chain
+# TODO: add lines to cronjob to expire user if traffic is exceeded
+
 echo "User created successfully"
 echo "Username: $username"
 echo "Password: $password"
