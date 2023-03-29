@@ -3,6 +3,14 @@ help: Multi User SSH Helper
 version: 0.1.0
 
 commands:
+  - name: init
+    alias: i
+    help: Initialize the mush
+    flags:
+      - long: --force
+        short: -f
+        help: "Force initialization even if the files already exist"
+
   - name: useradd
     alias: u
     help: Add a new user
@@ -26,4 +34,3 @@ commands:
         arg: traffic
         help: "Traffic limit of the new user"
         default: 20GB
-  - name: test        
