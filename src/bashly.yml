@@ -26,3 +26,4 @@ commands:
         arg: traffic
         help: "Traffic limit of the new user"
         default: 20GB
+  - name: test        
