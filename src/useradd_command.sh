@@ -11,7 +11,7 @@ traffic=${args[--traffic]}
 
 encrypted=$(openssl passwd -1 $password)
 
-result=$(useradd -e $expire -M -s /bin/sh -p $encrypted $username)
+result=$(useradd -e $expire -M -s /bin/true -p $encrypted $username)
 if [[ $result == "useradd: user '$username' already exists" ]]; then
     echo "user already exists"
     exit 1
