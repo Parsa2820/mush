@@ -1,3 +1,9 @@
+CONFIG_DIR="$HOME/.mush"
+USERS_FILE="$CONFIG_DIR/users.json"
+PORT_FILE="$CONFIG_DIR/port"
+LOG_FILE="$CONFIG_DIR/mush.log"
+CRON_FILE="$CONFIG_DIR/cron.sh"
+
 username=${args[--username]}
 if [[ -z $username ]]; then
     username=$(openssl rand -hex 16)
