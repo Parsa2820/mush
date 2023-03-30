@@ -1,6 +1,6 @@
 username=${args[--username]}
 if [[ -z $username ]]; then
-    username=$(openssl rand -hex 16)
+    username=$(openssl rand -hex 8)
 fi
 password=${args[--password]}
 if [[ -z $password ]]; then
