@@ -134,8 +134,8 @@ mush_useradd_usage() {
 
     # :flag.usage
     printf "  %s\n" "--traffic, -t TRAFFIC"
-    printf "    Traffic limit of the new user\n"
-    printf "    Default: 20GB\n"
+    printf "    Traffic limit of the new user in GB\n"
+    printf "    Default: 20\n"
     echo
 
     # :command.usage_fixed_flags
@@ -204,6 +204,7 @@ mush_init_command() {
   # src/init_command.sh
   CONFIG_DIR="$HOME/.mush"
   USERS_FILE="$CONFIG_DIR/users.json"
+  PORT_FILE="$CONFIG_DIR/port"
   LOG_FILE="$CONFIG_DIR/mush.log"
   CRON_FILE="$CONFIG_DIR/cron.sh"
 
@@ -221,6 +222,7 @@ mush_init_command() {
   mkdir -p $CONFIG_DIR
 
   echo "[]" > $USERS_FILE
+  echo "3000" > $PORT_FILE
   touch $LOG_FILE
   touch $CRON_FILE
   chmod +x $CRON_FILE
@@ -251,12 +253,21 @@ mush_useradd_command() {
       exit 1
   fi
 
-  # TODO: add iptables chain, send every tcp traffic with user source port to this chain
-  # TODO: add lines to cronjob to expire user if traffic is exceeded
+  port=$(cat $PORT_FILE)
+  echo $((port + 1)) > $PORT_FILE
+  echo "Match Port $port" >> /etc/ssh/sshd_config
+  echo "\tPermitUser $username" >> /etc/ssh/sshd_config
+
+  iptables -N ssh_$username
+  iptables -A OUTPUT -p tcp --sport $port -j ssh_$username
+  iptables-save > /etc/iptables/rules.v4
+
+  echo "check($username, $traffic)" >> $CRON_FILE
 
   echo "User created successfully"
   echo "Username: $username"
   echo "Password: $password"
+  echo "Port: $port"
 }
 
 # :command.parse_requirements
@@ -492,7 +503,7 @@ mush_useradd_parse_requirements() {
 
   # :command.default_assignments
   [[ -n ${args['--expire']:-} ]] || args['--expire']="$(date -d "+1 month" +%Y-%m-%d)"
-  [[ -n ${args['--traffic']:-} ]] || args['--traffic']="20GB"
+  [[ -n ${args['--traffic']:-} ]] || args['--traffic']="20"
 
 }
 
