@@ -234,6 +234,12 @@ mush_init_command() {
 # :command.function
 mush_useradd_command() {
   # src/useradd_command.sh
+  CONFIG_DIR="$HOME/.mush"
+  USERS_FILE="$CONFIG_DIR/users.json"
+  PORT_FILE="$CONFIG_DIR/port"
+  LOG_FILE="$CONFIG_DIR/mush.log"
+  CRON_FILE="$CONFIG_DIR/cron.sh"
+
   username=${args[--username]}
   if [[ -z $username ]]; then
       username=$(openssl rand -hex 16)
@@ -268,6 +274,7 @@ mush_useradd_command() {
   echo "Username: $username"
   echo "Password: $password"
   echo "Port: $port"
+
 }
 
 # :command.parse_requirements
