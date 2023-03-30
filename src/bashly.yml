@@ -32,5 +32,5 @@ commands:
       - long: --traffic
         short: -t
         arg: traffic
-        help: "Traffic limit of the new user"
-        default: 20GB
+        help: "Traffic limit of the new user in GB"
+        default: 20

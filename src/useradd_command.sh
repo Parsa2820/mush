@@ -17,9 +17,18 @@ if [[ $result == "useradd: user '$username' already exists" ]]; then
     exit 1
 fi
 
-# TODO: add iptables chain, send every tcp traffic with user source port to this chain
-# TODO: add lines to cronjob to expire user if traffic is exceeded
+port=$(cat $PORT_FILE)
+echo $((port + 1)) > $PORT_FILE
+echo "Match Port $port" >> /etc/ssh/sshd_config
+echo "\tPermitUser $username" >> /etc/ssh/sshd_config
+
+iptables -N ssh_$username
+iptables -A OUTPUT -p tcp --sport $port -j ssh_$username
+iptables-save > /etc/iptables/rules.v4
+
+echo "check($username, $traffic)" >> $CRON_FILE
 
 echo "User created successfully"
 echo "Username: $username"
 echo "Password: $password"
+echo "Port: $port"
