@@ -10,7 +10,7 @@ Use your distro's package manager to install following dependencies.
 - `openssh-server`
 - `openssl`
 
-The just clone the repo and run the script.
+Then just clone the repo and run the script.
 
 ```bash
 git clone --depth 1 https://github.com/Parsa2820/mush.git
