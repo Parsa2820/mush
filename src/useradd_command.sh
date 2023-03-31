@@ -26,8 +26,9 @@ fi
 port=$(cat $PORT_FILE)
 echo $((port + 1)) > $PORT_FILE
 echo "Match LocalPort $port" >> /etc/ssh/sshd_config
-echo "AllowUser $username" >> /etc/ssh/sshd_config
+echo -e "\tAllowUsers $username" >> /etc/ssh/sshd_config
 # Also open port
+systemctl restart ssh
 
 iptables -N ssh_$username
 iptables -A OUTPUT -p tcp --sport $port -j ssh_$username

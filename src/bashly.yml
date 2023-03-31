@@ -34,3 +34,16 @@ commands:
         arg: traffic
         help: "Traffic limit of the new user in GB"
         default: "20"
+
+  - name: userdel
+    alias: d
+    help: Delete a user
+
+    args:
+      - name: username
+        required: true
+        help: "Username of the user to delete"
+
+  - name: list
+    alias: l
+    help: List all users
