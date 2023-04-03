@@ -1,4 +1,6 @@
-echo "# this file is located in 'src/list_command.sh'"
-echo "# code for 'mush list' goes here"
-echo "# you can edit it freely and regenerate (it will not be overwritten)"
-inspect_args
+KEYWORD="ssh_"
+
+result=$(iptables -L OUTPUT -n -v)
+
+echo "$result" | head -n 2
+echo "$result" | grep $KEYWORD
