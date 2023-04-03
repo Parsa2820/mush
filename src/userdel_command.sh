@@ -5,12 +5,12 @@ if [[ -z $username ]]; then
     exit 1
 fi
 
-userdel -r $username
+userdel -r $username || true
 
 rule=$(iptables -S | grep OUTPUT | grep ssh_$username)
 if [[ -n $rule ]]; then
     iptables -D OUTPUT $rule
-    iptables -X ssh_$username
+    iptables -X ssh_$username 
     iptables-save > /etc/iptables/rules.v4
 fi
 
