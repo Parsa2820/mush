@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install ruby-full
-          sudo gem install bashly
+          gem install bashly
 
       - name: Generate bash script
         run: bashly generate
