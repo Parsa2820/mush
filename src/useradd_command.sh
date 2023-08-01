@@ -14,6 +14,7 @@ if [[ -z $password ]]; then
 fi
 expire=${args[--expire]}
 traffic=${args[--traffic]}
+simultaneous=${args[--simultaneous]}
 
 encrypted=$(openssl passwd -1 $password)
 
@@ -23,8 +24,11 @@ if [[ $result == "useradd: user '$username' already exists" ]]; then
     exit 1
 fi
 
+echo -e "$username'\t'hard'\t'maxlogins'\t$simultaneous" >> /etc/security/limits.conf
+
 port=$(cat $PORT_FILE)
 echo $((port + 1)) > $PORT_FILE
+echo "Port $port" >> /etc/ssh/sshd_config
 echo "Match LocalPort $port" >> /etc/ssh/sshd_config
 echo -e "\tAllowUsers $username" >> /etc/ssh/sshd_config
 # Also open port

@@ -34,6 +34,11 @@ commands:
         arg: traffic
         help: "Traffic limit of the new user in GB"
         default: "20"
+      - long: --simultaneous
+        short: -s
+        arg: simultaneous
+        help: "Simultaneous connection limit of the new user"
+        default: "1"
 
   - name: userdel
     alias: d
