@@ -28,7 +28,7 @@ echo -e "$username'\t'hard'\t'maxlogins'\t$simultaneous" >> /etc/security/limits
 
 port=$(cat $PORT_FILE)
 echo $((port + 1)) > $PORT_FILE
-echo "Port $port" >> /etc/ssh/sshd_config
+echo "Please add 'Port $port' to the '/etc/ssh/sshd_config' file" 
 echo "Match LocalPort $port" >> /etc/ssh/sshd_config
 echo -e "\tAllowUsers $username" >> /etc/ssh/sshd_config
 # Also open port
