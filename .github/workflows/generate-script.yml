@@ -11,13 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
-          sudo apt-get remove ruby
           sudo apt-get install ruby-full
-          gem install bashly
+          sudo gem install bashly
 
       - name: Generate bash script
         run: bashly generate
